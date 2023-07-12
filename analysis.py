@@ -27,19 +27,16 @@ def main(args):
             passwds = {}
             users = []
             with open(file,"r") as qd_results:
-                for line in qd_results.readlines():
+                for line in qd_results:
                     line_array=line.split(",")
                     if len(line_array)>4: ## This is a good line for reading
                         if line_array[4]!="": ## disregard blank entries
-                            passwd=line_array[4]
                             user=line_array[1]
                             if user not in users: ## deduplicate
                                 users.append(user)
-                                if passwd not in passwds: ## No there yet. add it.
-                                    passwds[passwd]=0
-                                else: ## Already there
-                                    passwds[passwd]=passwds[passwd]+1 ## increment it                            
-            if len(passwds)>0: ## If we got results, let's look at them
+                                passwd=line_array[4]
+                                passwds[passwd] = 0 if passwd not in passwds else passwds[passwd]+1
+            if passwds: ## If we got results, let's look at them
                 sorted_passwds=sorted(passwds, key=lambda i: int(passwds[i]), reverse=True)
                 print("[i] Top Ten passwords used: \n+=====================================+")
                 for i in range(0,10):
